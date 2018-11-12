@@ -16,6 +16,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static support.DriverManager.getDriver;
+
 public class MainTest {
     public static void main(String[] args) {
         /*WebDriver driver = getDriver();
@@ -34,7 +36,7 @@ public class MainTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".quickview")));
 
         driver.quit();*/
-        WebDriver driver = getDriver("chrome");
+        WebDriver driver = DriverManager.getConfiguredDriver("chrome");
         driver.navigate().to("http://prestashop-automation.qatestlab.com.ua/admin147ajyvk0/");
         // Filling email-feld:
         WebElement emailInput = driver.findElement(By.id("email"));
@@ -81,24 +83,7 @@ public class MainTest {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//td[text()[contains(.,'test category')]]")));
         System.out.println("EVERYTHING OK");
         driver.quit();
-
-
-
     }
 
-    public static WebDriver getDriver(String browser) {
-        switch (browser) {
-            case "firefox":
-                WebDriverManager.firefoxdriver().setup();
-                return new FirefoxDriver();
-            case "ie":
-            case "internet explorer" :
-                WebDriverManager.iedriver().setup();
-                return new InternetExplorerDriver();
-            case "chrome":
-            default:
-                WebDriverManager.chromedriver().setup();
-                return new ChromeDriver();
-        }
-    }
+
 }
