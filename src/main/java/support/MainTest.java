@@ -1,5 +1,6 @@
 package support;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,6 +33,7 @@ public class MainTest {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".quickview")));
 
         driver.quit();*/
+        String categoryName = generateString();
         WebDriver driver = DriverManager.getConfiguredDriver("chrome");
         driver.navigate().to("http://prestashop-automation.qatestlab.com.ua/admin147ajyvk0/");
         // Filling email-feld:
@@ -64,7 +66,7 @@ public class MainTest {
         ).equals("complete"));
         // Create new category:
         WebElement categiryInput = driver.findElement(By.id("name_1"));
-        categiryInput.sendKeys("test category");
+        categiryInput.sendKeys(categoryName);
         WebElement categorySubmit = driver.findElement(By.id("category_form_submit_btn"));
         categorySubmit.click();
         // Check success-message presence:
@@ -72,13 +74,20 @@ public class MainTest {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.alert.alert-success")));
         // Filtering categories by name:
         WebElement filter = driver.findElement(By.name("categoryFilter_name"));
-        filter.sendKeys("test category");
+        filter.sendKeys(categoryName);
         WebElement searchButton = driver.findElement(By.id("submitFilterButtoncategory"));
         searchButton.click();
         WebDriverWait waitForResultPresense = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//td[text()[contains(.,'test category')]]")));
+        String result = "//td[text()[contains(.,'" + categoryName + "')]]";
+        // "//td[text()[contains(.,'test category')]]"
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(result)));
         System.out.println("EVERYTHING OK");
         driver.quit();
+    }
+
+    // Generating random category-name:
+    private static String generateString() {
+        return RandomStringUtils.randomAlphabetic(10);
     }
 
 
